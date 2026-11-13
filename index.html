@@ -96,8 +96,8 @@ for(let i=0;i<fi.files.length;i++){const f=fi.files.item(i);pts.push({inline_dat
 let body={contents:[{parts:pts}]};
 if(js)body.generationConfig={response_mime_type:"application/json"};
 
-// تم التعديل هنا لاستخدام أحدث صيغة استدعاء معتمدة ونظامية
-const u="https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+k;
+// تم ضبط النموذج هنا ليطابق gemini-3.8-flash حصراً حسب طلب النظام
+const u="https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key="+k;
 const r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
 const d=await r.json();
 if(d.error){out.innerHTML=`<div class="res" style="color:red">❌ خطأ من الـ API: ${d.error.message}</div>`;return}
