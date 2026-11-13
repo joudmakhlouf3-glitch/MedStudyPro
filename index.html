@@ -95,7 +95,7 @@ let pts=[{text:ins+"\n\nملاحظات الطالب:\n"+tx}];
 for(let i=0;i<fi.files.length;i++){const f=fi.files.item(i);pts.push({inline_data:{mime_type:f.type||"application/pdf",data:await toB64(f)}})}
 let body={contents:[{parts:pts}]};
 if(js)body.generationConfig={response_mime_type:"application/json"};
-const u="https://generativelanguage.googleapis.com"+"/v1beta/models/gemini-2.5-flash:generateContent?key="+k;
+const u="https://generativelanguage.googleapis.com"+"/v1beta/models/gemini-3.8-flash:generateContent?key="+k;
 const r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
 const d=await r.json();
 if(d.error){out.innerHTML=`<div class="res" style="color:red">❌ خطأ: ${d.error.message}</div>`;return}
