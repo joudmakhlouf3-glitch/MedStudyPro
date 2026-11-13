@@ -12,18 +12,10 @@ h1{color:var(--p);text-align:center;margin:0 0 20px;font-size:25px}
 .grp{margin-bottom:15px}
 label{display:block;font-weight:700;margin-bottom:6px;font-size:15px}
 input[type=password],textarea,select{width:100%;padding:12px;border:1.5px solid #cbd5e1;border-radius:10px;box-sizing:border-box;font-size:15px;font-family:inherit}
-.fbox{background:#f0f9ff;border:2px dashed var(--p);padding:15px;border-radius:10px;text-align:center}
-.fbox input{width:100%;font-size:14px}
 .btn{width:100%;padding:15px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:18px;font-weight:700;cursor:pointer;margin-top:5px}
 .btn:hover{background:var(--pd)}
 .out{margin-top:25px;display:none}
 .res{background:#f8fafc;border-right:4px solid var(--p);padding:18px;border-radius:10px;line-height:1.8;white-space:pre-wrap;font-size:16px}
-.mm{background:#f8fafc;padding:18px;border-radius:12px;border:1px solid #e2e8f0}
-.mm-r{background:var(--p);color:#fff;padding:12px;border-radius:10px;font-weight:700;font-size:18px;text-align:center;margin-bottom:15px}
-.mm-b{background:#fff;border-right:4px solid #0ea5e9;padding:12px 15px;margin-bottom:12px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.04)}
-.mm-t{font-weight:700;color:var(--pd);font-size:16px;margin-bottom:8px}
-.mm-l{margin:0;padding-right:20px;color:#334155}
-.mm-l li{margin-bottom:5px;line-height:1.5}
 .qc{background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:16px}
 .qq{font-weight:700;font-size:17px;margin-bottom:12px;color:#0f172a;line-height:1.5}
 .opt{display:block;width:100%;text-align:right;padding:12px 14px;margin-bottom:8px;background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:8px;font-size:15px;cursor:pointer;font-family:inherit;color:var(--t)}
@@ -38,76 +30,64 @@ input[type=password],textarea,select{width:100%;padding:12px;border:1.5px solid 
 <div class="box">
 <h1>🩺 MedStudyPro الشامل</h1>
 <div class="grp">
-<label>مفتاح الذكاء الاصطناعي (يُحفظ تلقائياً في جهازك):</label>
-<input type="password" id="apiKey" placeholder="الصق مفتاح Gemini API هنا لمرة واحدة">
+<label>مفتاح الذكاء الاصطناعي:</label>
+<input type="password" id="apiKey" placeholder="الصق مفتاح Gemini API هنا">
 </div>
 <div class="grp">
-<label>اختر الأداة الدراسية المطلوبة:</label>
+<label>اختر الأداة الدراسية:</label>
 <select id="taskType" onchange="document.getElementById('qGrp').style.display=this.value==='quiz'?'block':'none'">
-<option value="sum">🎯 تلخيص دقيق شامل موجّه لأسئلة الـ MCQ</option>
-<option value="quiz">📝 اختبار تفاعلي MCQs (أخضر/أحمر + شرح + تقييم نهائي)</option>
-<option value="map">🧠 إنشاء خريطة ذهنية منظمة للمحاضرة</option>
+<option value="sum">🎯 تلخيص دقيق وموجه لأسئلة الـ MCQ</option>
+<option value="quiz">📝 اختبار تفاعلي MCQs (أخضر/أحمر + شرح)</option>
+<option value="map">🧠 خريطة ذهنية للمحاضرة</option>
 </select>
 </div>
 <div class="grp" id="qGrp" style="display:none">
-<label>عدد أسئلة الاختبار المطلوبة:</label>
+<label>عدد الأسئلة:</label>
 <select id="qCount">
-<option value="5">5 أسئلة (سريع)</option>
-<option value="10" selected>10 أسئلة (متوسط)</option>
-<option value="15">15 سؤالاً (شامل)</option>
-<option value="20">20 سؤالاً (مكثف)</option>
+<option value="5">5 أسئلة</option>
+<option value="10" selected>10 أسئلة</option>
+<option value="15">15 سؤالاً</option>
 </select>
 </div>
 <div class="grp">
-<label>إرفاق ملفات المحاضرة (PDF أو صور متعددة):</label>
-<div class="fbox">
-<input type="file" id="fIn" accept=".pdf,image/*,.txt" multiple>
-<div style="font-size:12px;color:#475569;margin-top:6px">يمكنك اختيار ملف PDF أو تحديد عدة صور معاً</div>
+<label>النص الطبي للمحاضرة (انسخ النص والصقه هنا لتجنب أخطاء التحميل):</label>
+<textarea id="sTxt" rows="8" placeholder="الصق نص المحاضرة الطبية هنا..."></textarea>
 </div>
-</div>
-<div class="grp">
-<label>نص إضافي أو توجيه خاص (اختياري عند رفع ملف):</label>
-<textarea id="sTxt" rows="3" placeholder="اكتب النص الطبي هنا أو أضف ملاحظة..."></textarea>
-</div>
-<button class="btn" onclick="run()">ابدأ المعالجة الذكية ✨</button>
+<button class="btn" onclick="run()">ابدأ المعالجة الفورية ✨</button>
 <div id="out" class="out"></div>
 </div>
 <script>
 let qData=[],ansC=0,corC=0;
 window.onload=()=>{const k=localStorage.getItem('msp_k');if(k)document.getElementById('apiKey').value=k};
-const toB64=f=>new Promise((res,rej)=>{const r=new FileReader();r.readAsDataURL(f);r.onload=()=>res(r.result.substring(r.result.indexOf(',')+1));r.onerror=e=>rej(e)});
 const esc=t=>t.replace(/&/g,"&").replace(/</g,"<").replace(/>/g,">");
 
 async function run(){
-const k=document.getElementById('apiKey').value.trim(),tp=document.getElementById('taskType').value,qc=document.getElementById('qCount').value,tx=document.getElementById('sTxt').value.trim(),fi=document.getElementById('fIn'),out=document.getElementById('out');
-if(!k){alert("يرجى إدخال مفتاح API أولاً!");return}
+const k=document.getElementById('apiKey').value.trim(),tp=document.getElementById('taskType').value,qc=document.getElementById('qCount').value,tx=document.getElementById('sTxt').value.trim(),out=document.getElementById('out');
+if(!k){alert("أدخل مفتاح API!");return}
 localStorage.setItem('msp_k',k);
-if(!tx&&fi.files.length===0){alert("يرجى كتابة نص طبي أو إرفاق ملف/صورة!");return}
-out.style.display="block";out.innerHTML='<div class="ld">⏳ جاري تحليل المحاضرة وتجهيز المحتوى الطبي...</div>';
+if(!tx){alert("يرجى لصق نص المحاضرة هنا!");return}
+out.style.display="block";out.innerHTML='<div class="ld">⏳ جاري توليد الأسئلة فوراً...</div>';
 
 let ins="",js=false;
-if(tp==="sum")ins="أنت أستاذ طب خبير. لخص المحتوى المرفق بدقة وشمولية بشكل موجه لأسئلة MCQ في الامتحانات الطبية (ركز على الكلمات المفتاحية، الاستثناءات، الأكثر شيوعاً، العلاج الأول، الأرقام والجرعات، وفخاخ الأسئلة) بتنسيق واضح باللغة العربية مع المصطلحات الطبية بالإنجليزية بين قوسين.";
-else if(tp==="map"){js=true;ins='حول المحتوى الطبي إلى خريطة ذهنية هرمية شاملة بالعربية مع المصطلحات الإنجليزية. أرجع JSON حصراً بهذا الهيكل بدون أي نصوص إضافية قبله أو بعده:{"title":"العنوان","branches":[{"branchTitle":"فرع","items":["نقطة 1","نقطة 2"]}]}';}
-else{js=true;ins=`أنشئ اختباراً طبياً احترافياً من ${qc} أسئلة MCQ بالضبط تغطي أدق تفاصيل المحتوى. أرجع JSON حصراً بهذا الهيكل بدون أي نصوص إضافية قبله أو بعده:[{"question":"السؤال؟","options":["خيار 1","خيار 2","خيار 3","خيار 4"],"correctIndex":0,"explanation":"شرح علمي دقيق لماذا الإجابة صحيحة ولماذا البقية خاطئة."}]`;}
+if(tp==="sum")ins="أنت أستاذ طب خبير. لخص النص المرفق بدقة لأسئلة الـ MCQ الطبية:";
+else if(tp==="map"){js=true;ins='حول النص إلى خريطة ذهنية بصيغة JSON حصراً بهذا الهيكل بدون أي نصوص إضافية:{"title":"العنوان","branches":[{"branchTitle":"فرع","items":["نقطة 1"]}]}';}
+else{js=true;ins=`أنشئ اختباراً طبياً من ${qc} أسئلة MCQ من النص المرفق بصيغة JSON حصراً بدون أي نصوص إضافية:[{"question":"السؤال؟","options":["خيار 1","خيار 2","خيار 3","خيار 4"],"correctIndex":0,"explanation":"الشرح العلمي."}]`;}
 
 try{
-let pts=[{text:ins+"\n\nملاحظات الطالب:\n"+tx}];
-for(let i=0;i<fi.files.length;i++){const f=fi.files.item(i);pts.push({inline_data:{mime_type:f.type||"application/pdf",data:await toB64(f)}})}
-let body={contents:[{parts:pts}]};
+let body={contents:[{parts:[{text:ins+"\n\n"+tx}]}]};
 if(js)body.generationConfig={response_mime_type:"application/json"};
 
-// تم ضبط النموذج هنا ليطابق gemini-3.8-flash حصراً حسب طلب النظام
 const u="https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key="+k;
 const r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
 const d=await r.json();
-if(d.error){out.innerHTML=`<div class="res" style="color:red">❌ خطأ من الـ API: ${d.error.message}</div>`;return}
+if(d.error){out.innerHTML=`<div class="res" style="color:red">❌ خطأ: ${d.error.message}</div>`;return}
 
 const raw=d.candidates[0].content.parts[0].text;
 if(tp==="sum")out.innerHTML=`<div class="res">${esc(raw)}</div>`;
 else if(tp==="map"){
 const cleanJson = raw.replace(/```json/g,'').replace(/```/g,'').trim();
 const m=JSON.parse(cleanJson);
-let h=`<div class="mm"><div class="mm-r">🧠 ${esc(m.title)}</div>`;m.branches.forEach(b=>{h+=`<div class="mm-b"><div class="mm-t">📌 ${esc(b.branchTitle)}</div><ul class="mm-l">`;b.items.forEach(it=>h+=`<li>${esc(it)}</li>`);h+=`</ul></div>`});out.innerHTML=h+`</div>`
+let h=`<div class="mm" style="background:#f8fafc;padding:18px;border-radius:12px"><div style="background:#0284c7;color:#fff;padding:12px;border-radius:10px;font-weight:700;text-align:center;margin-bottom:15px">🧠 ${esc(m.title)}</div>`;m.branches.forEach(b=>{h+=`<div style="background:#fff;padding:12px;margin-bottom:12px;border-radius:8px"><div style="font-weight:700;color:#0369a1;margin-bottom:8px">📌 ${esc(b.branchTitle)}</div><ul>`;b.items.forEach(it=>h+=`<li>${esc(it)}</li>`);h+=`</ul></div>`});out.innerHTML=h+`</div>`
 }
 else{
 const cleanJson = raw.replace(/```json/g,'').replace(/```/g,'').trim();
@@ -116,11 +96,11 @@ ansC=0;corC=0;let h="";
 qData.forEach((q,qi)=>{
 h+=`<div class="qc"><div class="qq">${qi+1}. ${esc(q.question)}</div>`;
 q.options.forEach((o,oi)=>h+=`<button class="opt" id="b-${qi}-${oi}" onclick="chk(${qi},${oi})">${esc(o)}</button>`);
-h+=`<div class="exp" id="e-${qi}"><strong>💡 التفسير العلمي:</strong><br>${esc(q.explanation)}</div></div>`
+h+=`<div class="exp" id="e-${qi}"><strong>💡 التفسير:</strong><br>${esc(q.explanation)}</div></div>`
 });
 out.innerHTML=h+`<div class="sb" id="sb"></div>`;
 }
-}catch(e){out.innerHTML=`<div class="res" style="color:red">❌ خطأ في المعالجة أو تنسيق البيانات: ${e.message}</div>`}
+}catch(e){out.innerHTML=`<div class="res" style="color:red">❌ خطأ: ${e.message}</div>`}
 }
 
 function chk(qi,si){
@@ -130,8 +110,7 @@ if(si===ci)corC++;else document.getElementById(`b-${qi}-${si}`).classList.add('n
 document.getElementById(`e-${qi}`).style.display="block";
 if(++ansC===qData.length){
 const sb=document.getElementById('sb'),tot=qData.length,pct=Math.round((corC/tot)*100);
-let gr=pct>=85?"ممتاز! مستوى متقدم 🏆":pct>=65?"جيد جداً 👍":"يحتاج مراجعة إضافية 📚";
-sb.innerHTML=`<h2>📊 التقييم النهائي</h2><p style="font-size:20px;font-weight:700">النتيجة: ${corC} من ${tot} (${pct}%)</p><p style="color:#fde047;font-weight:700">التقدير: ${gr}</p>`;
+sb.innerHTML=`<h2>📊 التقييم</h2><p style="font-size:20px;font-weight:700">النتيجة: ${corC} من ${tot} (${pct}%)</p>`;
 sb.style.display="block";sb.scrollIntoView({behavior:'smooth'});
 }}
 </script>
