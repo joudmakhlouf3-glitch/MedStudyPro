@@ -1,155 +1,122 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedStudyPro - مساعدك الطبي الذكي</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f4f8;
-            color: #1e293b;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-        .container {
-            background: white;
-            max-width: 700px;
-            width: 100%;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-        h1 {
-            color: #0284c7;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .input-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        input, textarea, select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-        button {
-            width: 100%;
-            padding: 14px;
-            background-color: #0284c7;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background-color: #0369a1;
-        }
-        .result-box {
-            margin-top: 25px;
-            padding: 20px;
-            background-color: #f8fafc;
-            border-right: 4px solid #0284c7;
-            border-radius: 6px;
-            white-space: pre-wrap;
-            line-height: 1.6;
-            display: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedStudyPro - المساعد الطبي الشامل</title>
+<style>
+:root{--p:#0284c7;--pd:#0369a1;--bg:#f1f5f9;--c:#fff;--t:#1e293b;--gb:#dcfce7;--gbd:#16a34a;--gt:#14532d;--rb:#fee2e2;--rbd:#dc2626;--rt:#7f1d1d}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--t);margin:0;padding:15px;display:flex;justify-content:center}
+.box{background:var(--c);max-width:800px;width:100%;padding:22px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+h1{color:var(--p);text-align:center;margin:0 0 20px;font-size:25px}
+.grp{margin-bottom:15px}
+label{display:block;font-weight:700;margin-bottom:6px;font-size:15px}
+input[type=password],textarea,select{width:100%;padding:12px;border:1.5px solid #cbd5e1;border-radius:10px;box-sizing:border-box;font-size:15px;font-family:inherit}
+.fbox{background:#f0f9ff;border:2px dashed var(--p);padding:15px;border-radius:10px;text-align:center}
+.fbox input{width:100%;font-size:14px}
+.btn{width:100%;padding:15px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:18px;font-weight:700;cursor:pointer;margin-top:5px}
+.btn:hover{background:var(--pd)}
+.out{margin-top:25px;display:none}
+.res{background:#f8fafc;border-right:4px solid var(--p);padding:18px;border-radius:10px;line-height:1.8;white-space:pre-wrap;font-size:16px}
+.mm{background:#f8fafc;padding:18px;border-radius:12px;border:1px solid #e2e8f0}
+.mm-r{background:var(--p);color:#fff;padding:12px;border-radius:10px;font-weight:700;font-size:18px;text-align:center;margin-bottom:15px}
+.mm-b{background:#fff;border-right:4px solid #0ea5e9;padding:12px 15px;margin-bottom:12px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.mm-t{font-weight:700;color:var(--pd);font-size:16px;margin-bottom:8px}
+.mm-l{margin:0;padding-right:20px;color:#334155}
+.mm-l li{margin-bottom:5px;line-height:1.5}
+.qc{background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:16px}
+.qq{font-weight:700;font-size:17px;margin-bottom:12px;color:#0f172a;line-height:1.5}
+.opt{display:block;width:100%;text-align:right;padding:12px 14px;margin-bottom:8px;background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:8px;font-size:15px;cursor:pointer;font-family:inherit;color:var(--t)}
+.opt.ok{background:var(--gb)!important;border-color:var(--gbd)!important;color:var(--gt)!important;font-weight:700}
+.opt.no{background:var(--rb)!important;border-color:var(--rbd)!important;color:var(--rt)!important;font-weight:700}
+.exp{margin-top:12px;padding:12px;background:#f0fdf4;border-right:4px solid var(--gbd);border-radius:8px;font-size:14.5px;line-height:1.6;display:none}
+.sb{background:linear-gradient(135deg,#0284c7,#0369a1);color:#fff;padding:20px;border-radius:12px;text-align:center;margin-top:20px;display:none}
+.ld{text-align:center;padding:20px;font-weight:700;color:var(--p);font-size:17px}
+</style>
 </head>
 <body>
-
-<div class="container">
-    <h1>🩺 MedStudyPro</h1>
-    
-    <div class="input-group">
-        <label for="apiKey">مفتاح الذكاء الاصطناعي (Gemini API Key):</label>
-        <input type="password" id="apiKey" placeholder="الصق المفتاح الذي نسخته من Google AI Studio هنا">
-    </div>
-
-    <div class="input-group">
-        <label for="taskType">اختر نوع المساعدة الدراسية:</label>
-        <select id="taskType">
-            <option value="summarize">تلخيص محاضرة أو نص طبي</option>
-            <option value="quiz">إنشاء أسئلة اختبار (MCQs) مع الحل</option>
-            <option value="explain">تبسيط مفهوم طبي معقد</option>
-        </select>
-    </div>
-
-    <div class="input-group">
-        <label for="studyText">المحتوى أو السؤال الطبي:</label>
-        <textarea id="studyText" rows="6" placeholder="اكتب أو الصق النص الطبي هنا..."></textarea>
-    </div>
-
-    <button onclick="generateStudyHelp()">ابدأ المعالجة الذكية ✨</button>
-
-    <div id="result" class="result-box"></div>
+<div class="box">
+<h1>🩺 MedStudyPro الشامل</h1>
+<div class="grp">
+<label>مفتاح الذكاء الاصطناعي (يُحفظ تلقائياً في جهازك):</label>
+<input type="password" id="apiKey" placeholder="الصق مفتاح Gemini API هنا لمرة واحدة">
 </div>
-
+<div class="grp">
+<label>اختر الأداة الدراسية المطلوبة:</label>
+<select id="taskType" onchange="document.getElementById('qGrp').style.display=this.value==='quiz'?'block':'none'">
+<option value="sum">🎯 تلخيص دقيق شامل موجّه لأسئلة الـ MCQ</option>
+<option value="quiz">📝 اختبار تفاعلي MCQs (أخضر/أحمر + شرح + تقييم نهائي)</option>
+<option value="map">🧠 إنشاء خريطة ذهنية منظمة للمحاضرة</option>
+</select>
+</div>
+<div class="grp" id="qGrp" style="display:none">
+<label>عدد أسئلة الاختبار المطلوبة:</label>
+<select id="qCount">
+<option value="5">5 أسئلة (سريع)</option>
+<option value="10" selected>10 أسئلة (متوسط)</option>
+<option value="15">15 سؤالاً (شامل)</option>
+<option value="20">20 سؤالاً (مكثف)</option>
+</select>
+</div>
+<div class="grp">
+<label>إرفاق ملفات المحاضرة (PDF أو صور متعددة):</label>
+<div class="fbox">
+<input type="file" id="fIn" accept=".pdf,image/*,.txt" multiple>
+<div style="font-size:12px;color:#475569;margin-top:6px">يمكنك اختيار ملف PDF أو تحديد عدة صور معاً</div>
+</div>
+</div>
+<div class="grp">
+<label>نص إضافي أو توجيه خاص (اختياري عند رفع ملف):</label>
+<textarea id="sTxt" rows="3" placeholder="اكتب النص الطبي هنا أو أضف ملاحظة..."></textarea>
+</div>
+<button class="btn" onclick="run()">ابدأ المعالجة الذكية ✨</button>
+<div id="out" class="out"></div>
+</div>
 <script>
-    async function generateStudyHelp() {
-        const apiKey = document.getElementById('apiKey').value.trim();
-        const taskType = document.getElementById('taskType').value;
-        const studyText = document.getElementById('studyText').value.trim();
-        const resultBox = document.getElementById('result');
+let qData=[],ansC=0,corC=0;
+window.onload=()=>{const k=localStorage.getItem('msp_k');if(k)document.getElementById('apiKey').value=k};
+const toB64=f=>new Promise((res,rej)=>{const r=new FileReader();r.readAsDataURL(f);r.onload=()=>res(r.result.substring(r.result.indexOf(',')+1));r.onerror=e=>rej(e)});
+const esc=t=>t.replace(/&/g,"&").replace(/</g,"<").replace(/>/g,">");
 
-        if (!apiKey) {
-            alert("يرجى إدخال مفتاح API الخاص بك أولاً!");
-            return;
-        }
-        if (!studyText) {
-            alert("يرجى كتابة النص الطبي المراد دراسته!");
-            return;
-        }
+async function run(){
+const k=document.getElementById('apiKey').value.trim(),tp=document.getElementById('taskType').value,qc=document.getElementById('qCount').value,tx=document.getElementById('sTxt').value.trim(),fi=document.getElementById('fIn'),out=document.getElementById('out');
+if(!k){alert("يرجى إدخال مفتاح API أولاً!");return}
+localStorage.setItem('msp_k',k);
+if(!tx&&fi.files.length===0){alert("يرجى كتابة نص طبي أو إرفاق ملف/صورة!");return}
+out.style.display="block";out.innerHTML='<div class="ld">⏳ جاري تحليل المحاضرة وتجهيز المحتوى الطبي...</div>';
 
-        let promptPrefix = "";
-        if (taskType === "summarize") {
-            promptPrefix = "لخص النص الطبي التالي في نقاط واضحة ومنظمة لطلاب الطب:\n\n";
-        } else if (taskType === "quiz") {
-            promptPrefix = "أنشئ 5 أسئلة اختيار من متعدد (MCQs) بناءً على النص التالي، مع ذكر الإجابة الصحيحة وشرحها في النهاية:\n\n";
-        } else if (taskType === "explain") {
-            promptPrefix = "اشرح المفهوم الطبي التالي بأسلوب مبسط جداً مع ضرب أمثلة سريرية إن أمكن:\n\n";
-        }
+let ins="",js=false;
+if(tp==="sum")ins="أنت أستاذ طب خبير. لخص المحتوى المرفق بدقة وشمولية بشكل موجه لأسئلة MCQ في الامتحانات الطبية (ركز على الكلمات المفتاحية، الاستثناءات، الأكثر شيوعاً، العلاج الأول، الأرقام والجرعات، وفخاخ الأسئلة) بتنسيق واضح باللغة العربية مع المصطلحات الطبية بالإنجليزية بين قوسين.";
+else if(tp==="map"){js=true;ins='حول المحتوى الطبي إلى خريطة ذهنية هرمية شاملة بالعربية مع المصطلحات الإنجليزية. أرجع JSON حصراً بهذا الهيكل:{"title":"العنوان","branches":[{"branchTitle":"فرع","items":["نقطة 1","نقطة 2"]}]}';}
+else{js=true;ins=`أنشئ اختباراً طبياً احترافياً من ${qc} أسئلة MCQ بالضبط تغطي أدق تفاصيل المحتوى. أرجع JSON حصراً بهذا الهيكل:[{"question":"السؤال؟","options":["خيار 1","خيار 2","خيار 3","خيار 4"],"correctIndex":0,"explanation":"شرح علمي دقيق لماذا الإجابة صحيحة ولماذا البقية خاطئة."}]`;}
 
-        resultBox.style.display = "block";
-        resultBox.innerText = "⏳ جاري تحليل المحتوى وتجهيز الإجابة...";
+try{
+let pts=[{text:ins+"\n\nملاحظات الطالب:\n"+tx}];
+for(let i=0;i<fi.files.length;i++){const f=fi.files.item(i);pts.push({inline_data:{mime_type:f.type||"application/pdf",data:await toB64(f)}})}
+let body={contents:[{parts:pts}]};
+if(js)body.generationConfig={response_mime_type:"application/json"};
+const u="https://generativelanguage.googleapis.com"+"/v1beta/models/gemini-2.5-flash:generateContent?key="+k;
+const r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+const d=await r.json();
+if(d.error){out.innerHTML=`<div class="res" style="color:red">❌ خطأ: ${d.error.message}</div>`;return}
+const raw=d.candidates.at(0).content.parts.at(0).text;
+if(tp==="sum")out.innerHTML=`<div class="res">${esc(raw)}</div>`;
+else if(tp==="map"){const m=JSON.parse(raw);let h=`<div class="mm"><div class="mm-r">🧠 ${esc(m.title)}</div>`;m.branches.forEach(b=>{h+=`<div class="mm-b"><div class="mm-t">📌 ${esc(b.branchTitle)}</div><ul class="mm-l">`;b.items.forEach(it=>h+=`<li>${esc(it)}</li>`);h+=`</ul></div>`});out.innerHTML=h+`</div>`}
+else{qData=JSON.parse(raw);ansC=0;corC=0;let h="";qData.forEach((q,qi)=>{h+=`<div class="qc"><div class="qq">${qi+1}. ${esc(q.question)}</div>`;q.options.forEach((o,oi)=>h+=`<button class="opt" id="b-${qi}-${oi}" onclick="chk(${qi},${oi})">${esc(o)}</button>`);h+=`<div class="exp" id="e-${qi}"><strong>💡 التفسير العلمي:</strong><br>${esc(q.explanation)}</div></div>`});out.innerHTML=h+`<div class="sb" id="sb"></div>`}
+}catch(e){out.innerHTML=`<div class="res" style="color:red">❌ خطأ في المعالجة: ${e.message}</div>`}
+}
 
-        try {
-            const response = await fetch(`https://googleapis.com{apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: promptPrefix + studyText }] }]
-                })
-            });
-
-            const data = await response.json();
-            
-            if (data.error) {
-                resultBox.innerText = "❌ خطأ: " + data.error.message;
-            } else {
-                const reply = data.candidates[0].content.parts[0].text;
-                resultBox.innerText = reply;
-            }
-        } catch (error) {
-            resultBox.innerText = "❌ حدث خطأ في الاتصال بالإنترنت أو الخادم.";
-        }
-    }
+function chk(qi,si){
+const q=qData.at(qi),ci=q.correctIndex;
+for(let i=0;i<q.options.length;i++){const b=document.getElementById(`b-${qi}-${i}`);b.disabled=true;if(i===ci)b.classList.add('ok')}
+if(si===ci)corC++;else document.getElementById(`b-${qi}-${si}`).classList.add('no');
+document.getElementById(`e-${qi}`).style.display="block";
+if(++ansC===qData.length){
+const sb=document.getElementById('sb'),tot=qData.length,pct=Math.round((corC/tot)*100);
+let gr=pct>=85?"ممتاز! مستوى متقدم 🏆":pct>=65?"جيد جداً 👍":"يحتاج مراجعة إضافية 📚";
+sb.innerHTML=`<h2>📊 التقييم النهائي</h2><p style="font-size:20px;font-weight:700">النتيجة: ${corC} من ${tot} (${pct}%)</p><p style="color:#fde047;font-weight:700">التقدير: ${gr}</p>`;
+sb.style.display="block";sb.scrollIntoView({behavior:'smooth'});
+}}
 </script>
-
 </body>
-  </html>
-  
+</html>
