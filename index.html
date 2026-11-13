@@ -87,27 +87,44 @@ out.style.display="block";out.innerHTML='<div class="ld">⏳ جاري تحليل
 
 let ins="",js=false;
 if(tp==="sum")ins="أنت أستاذ طب خبير. لخص المحتوى المرفق بدقة وشمولية بشكل موجه لأسئلة MCQ في الامتحانات الطبية (ركز على الكلمات المفتاحية، الاستثناءات، الأكثر شيوعاً، العلاج الأول، الأرقام والجرعات، وفخاخ الأسئلة) بتنسيق واضح باللغة العربية مع المصطلحات الطبية بالإنجليزية بين قوسين.";
-else if(tp==="map"){js=true;ins='حول المحتوى الطبي إلى خريطة ذهنية هرمية شاملة بالعربية مع المصطلحات الإنجليزية. أرجع JSON حصراً بهذا الهيكل:{"title":"العنوان","branches":[{"branchTitle":"فرع","items":["نقطة 1","نقطة 2"]}]}';}
-else{js=true;ins=`أنشئ اختباراً طبياً احترافياً من ${qc} أسئلة MCQ بالضبط تغطي أدق تفاصيل المحتوى. أرجع JSON حصراً بهذا الهيكل:[{"question":"السؤال؟","options":["خيار 1","خيار 2","خيار 3","خيار 4"],"correctIndex":0,"explanation":"شرح علمي دقيق لماذا الإجابة صحيحة ولماذا البقية خاطئة."}]`;}
+else if(tp==="map"){js=true;ins='حول المحتوى الطبي إلى خريطة ذهنية هرمية شاملة بالعربية مع المصطلحات الإنجليزية. أرجع JSON حصراً بهذا الهيكل بدون أي نصوص إضافية قبله أو بعده:{"title":"العنوان","branches":[{"branchTitle":"فرع","items":["نقطة 1","نقطة 2"]}]}';}
+else{js=true;ins=`أنشئ اختباراً طبياً احترافياً من ${qc} أسئلة MCQ بالضبط تغطي أدق تفاصيل المحتوى. أرجع JSON حصراً بهذا الهيكل بدون أي نصوص إضافية قبله أو بعده:[{"question":"السؤال؟","options":["خيار 1","خيار 2","خيار 3","خيار 4"],"correctIndex":0,"explanation":"شرح علمي دقيق لماذا الإجابة صحيحة ولماذا البقية خاطئة."}]`;}
 
 try{
 let pts=[{text:ins+"\n\nملاحظات الطالب:\n"+tx}];
 for(let i=0;i<fi.files.length;i++){const f=fi.files.item(i);pts.push({inline_data:{mime_type:f.type||"application/pdf",data:await toB64(f)}})}
 let body={contents:[{parts:pts}]};
 if(js)body.generationConfig={response_mime_type:"application/json"};
-const u="https://generativelanguage.googleapis.com"+"/v1beta/models/gemini-3.8-flash:generateContent?key="+k;
+
+// تم تحديث اسم النموذج هنا إلى gemini-1.5-flash لضمان الاستقرار والسرعة
+const u="https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+k;
 const r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
 const d=await r.json();
-if(d.error){out.innerHTML=`<div class="res" style="color:red">❌ خطأ: ${d.error.message}</div>`;return}
-const raw=d.candidates.at(0).content.parts.at(0).text;
+if(d.error){out.innerHTML=`<div class="res" style="color:red">❌ خطأ من الـ API: ${d.error.message}</div>`;return}
+
+const raw=d.candidates[0].content.parts[0].text;
 if(tp==="sum")out.innerHTML=`<div class="res">${esc(raw)}</div>`;
-else if(tp==="map"){const m=JSON.parse(raw);let h=`<div class="mm"><div class="mm-r">🧠 ${esc(m.title)}</div>`;m.branches.forEach(b=>{h+=`<div class="mm-b"><div class="mm-t">📌 ${esc(b.branchTitle)}</div><ul class="mm-l">`;b.items.forEach(it=>h+=`<li>${esc(it)}</li>`);h+=`</ul></div>`});out.innerHTML=h+`</div>`}
-else{qData=JSON.parse(raw);ansC=0;corC=0;let h="";qData.forEach((q,qi)=>{h+=`<div class="qc"><div class="qq">${qi+1}. ${esc(q.question)}</div>`;q.options.forEach((o,oi)=>h+=`<button class="opt" id="b-${qi}-${oi}" onclick="chk(${qi},${oi})">${esc(o)}</button>`);h+=`<div class="exp" id="e-${qi}"><strong>💡 التفسير العلمي:</strong><br>${esc(q.explanation)}</div></div>`});out.innerHTML=h+`<div class="sb" id="sb"></div>`}
-}catch(e){out.innerHTML=`<div class="res" style="color:red">❌ خطأ في المعالجة: ${e.message}</div>`}
+else if(tp==="map"){
+const cleanJson = raw.replace(/```json/g,'').replace(/```/g,'').trim();
+const m=JSON.parse(cleanJson);
+let h=`<div class="mm"><div class="mm-r">🧠 ${esc(m.title)}</div>`;m.branches.forEach(b=>{h+=`<div class="mm-b"><div class="mm-t">📌 ${esc(b.branchTitle)}</div><ul class="mm-l">`;b.items.forEach(it=>h+=`<li>${esc(it)}</li>`);h+=`</ul></div>`});out.innerHTML=h+`</div>`
+}
+else{
+const cleanJson = raw.replace(/```json/g,'').replace(/```/g,'').trim();
+qData=JSON.parse(cleanJson);
+ansC=0;corC=0;let h="";
+qData.forEach((q,qi)=>{
+h+=`<div class="qc"><div class="qq">${qi+1}. ${esc(q.question)}</div>`;
+q.options.forEach((o,oi)=>h+=`<button class="opt" id="b-${qi}-${oi}" onclick="chk(${qi},${oi})">${esc(o)}</button>`);
+h+=`<div class="exp" id="e-${qi}"><strong>💡 التفسير العلمي:</strong><br>${esc(q.explanation)}</div></div>`
+});
+out.innerHTML=h+`<div class="sb" id="sb"></div>`;
+}
+}catch(e){out.innerHTML=`<div class="res" style="color:red">❌ خطأ في المعالجة أو تنسيق البيانات: ${e.message}</div>`}
 }
 
 function chk(qi,si){
-const q=qData.at(qi),ci=q.correctIndex;
+const q=qData[qi],ci=q.correctIndex;
 for(let i=0;i<q.options.length;i++){const b=document.getElementById(`b-${qi}-${i}`);b.disabled=true;if(i===ci)b.classList.add('ok')}
 if(si===ci)corC++;else document.getElementById(`b-${qi}-${si}`).classList.add('no');
 document.getElementById(`e-${qi}`).style.display="block";
