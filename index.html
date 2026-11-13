@@ -96,8 +96,8 @@ for(let i=0;i<fi.files.length;i++){const f=fi.files.item(i);pts.push({inline_dat
 let body={contents:[{parts:pts}]};
 if(js)body.generationConfig={response_mime_type:"application/json"};
 
-// تم تحديث اسم النموذج هنا إلى gemini-1.5-flash لضمان الاستقرار والسرعة
-const u="https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+k;
+// تم التعديل إلى gemini-1.5-pro لضمان توافقه التام مع v1beta واستقرار استخراج الأسئلة
+const u="https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key="+k;
 const r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
 const d=await r.json();
 if(d.error){out.innerHTML=`<div class="res" style="color:red">❌ خطأ من الـ API: ${d.error.message}</div>`;return}
